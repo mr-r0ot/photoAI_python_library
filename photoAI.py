@@ -1,76 +1,130 @@
-M='Error! Please Install pytesseract Library!'
-L='pip install pytesseract'
-G='tmp2.png'
-F='tmp.png'
-D=int
-C=print
-import sys as H,os as B
-try:import cv2 as A
+import sys, os
+try:import cv2
 except:
-	B.system('pip install opencv-python')
-	try:import cv2 as A
-	except:C('Error! Please Install cv2 Library!');H.exit()
-try:import numpy as E
+    os.system('pip install opencv-python')
+    try:import cv2
+    except:print('Error! Please Install cv2 Library!');sys.exit()
+try:import numpy as np
 except:
-	B.system('pip install numpy')
-	try:import numpy as E
-	except:C('Error! Please Install numpy Library!');H.exit()
-try:from PIL import Image
+    os.system('pip install numpy')
+    try:import numpy as np
+    except:print('Error! Please Install numpy Library!');sys.exit()
+try:from PIL import Image 
 except:
-	B.system('pip install pillow')
-	try:from PIL import Image
-	except:C('Error! Please Install pillow Library!');H.exit()
-def help():C('\nCoded By NICOLA (Telegram: @black_nicola)\n\n          \nopen_video(video)\nsave_video(filename,video)\n          \nopen_photo(photo)\nshow_photo(title,photo)\nsave_photo(filename,photo)\n          \nwebcam.Get_webcam_frame()\n          \nphoto.Adjust_brightness_and_contrast(image,brightness=1,contrast=35)\nphoto.Adjust_grain(image)\nphoto.Remove_noise(image,pow=11)\nphoto.Increase_color(image, factor)\nphoto.Setting_size(image,size1,size2)\nphoto.Setting_size_PIL(image,size1,size2)\nphoto.Rotate_image(image, angle)\nphoto.Enhance_image(image)\nphoto.Reconstruct_image(image)\nphoto.Setting_quality(image,quality)\nphoto.Get_texts_in_image(image)\nphoto.Remove_text(image)\n          \nfilters.Dark_filter(image)\nfilters.Blurred_filter(image)\nfilters.Old_filter(image)\nfilters.Modern_quality(image,quality=1000)\n')
-def N():return'1.0.0'
-def O(video):return A.VideoCapture(video)
-def P(filename,video):
-	B=video;E=D(B.get(A.CAP_PROP_FPS));F=D(B.get(A.CAP_PROP_FRAME_WIDTH));G=D(B.get(A.CAP_PROP_FRAME_HEIGHT));C=A.VideoWriter(filename,A.VideoWriter_fourcc(*'XVID'),E,(F,G))
-	while B.isOpened():
-		H,I=B.read()
-		if not H:break
-		C.write(I)
-	B.release();C.release();A.destroyAllWindows()
-def J(photo):
-	try:return A.imread(photo)
-	except:return'Photo not find!'
-def Q(title,photo):A.imshow(title,photo);A.waitKey(0);A.destroyAllWindows()
-def K(filename,photo):A.imwrite(filename,photo)
-class R:
-	def Get_webcam_frame():
-		B=A.VideoCapture(0)
-		if not B.isOpened():C('Could not open the webcam');exit()
-		D,E=B.read()
-		if not D:C('Could not read a frame from the webcam');exit()
-		return E
-class I:
-	def Adjust_brightness_and_contrast(B,brightness=1,contrast=35):return A.convertScaleAbs(B,alpha=brightness,beta=contrast)
-	def Adjust_grain(B):C=E.array([[-1,-1,-1],[-1,9,-1],[-1,-1,-1]]);return A.filter2D(B,-1,C)
-	def Remove_noise(B,pow=11):return A.medianBlur(B,pow)
-	def Increase_color(C,factor):B=A.cvtColor(C,A.COLOR_BGR2HSV);B[:,:,1]=B[:,:,1]*factor;B[:,:,1]=E.clip(B[:,:,1],0,255);return A.cvtColor(B,A.COLOR_HSV2BGR)
-	def Setting_size(B,size1,size2):return A.resize(B,(D(size1),D(size2)))
-	def Setting_size_PIL(A,size1,size2):K(F,A);C=Image.open(F);C.resize((D(size1),D(size2)));C.save(G);A=J(G);B.remove(F);B.remove(G);return A
-	def Rotate_image(B,angle):C=tuple(E.array(B.shape[1::-1])/2);D=A.getRotationMatrix2D(C,angle,1.);F=A.warpAffine(B,D,B.shape[1::-1],flags=A.INTER_LINEAR);return F
-	def Enhance_image(B):C=E.array([[-1,-1,-1],[-1,9,-1],[-1,-1,-1]]);D=A.filter2D(B,-1,C);return D
-	def Reconstruct_image(B):C=A.GaussianBlur(B,(5,5),0);D=E.array([[0,1,0],[1,-4,1],[0,1,0]]);F=A.filter2D(C,-1,D);return F
-	def Setting_quality(A,quality):K(F,A);C=Image.open(F);C.save(G,quality=quality);A=J(G);B.remove(F);B.remove(G);return A
-	def Get_texts_in_image(D):
-		try:import pytesseract as A
-		except:
-			B.system(L)
-			try:import pytesseract as A
-			except:C(M);H.exit()
-		return A.image_to_string(D)
-	def Remove_text(D):
-		try:import pytesseract as E
-		except:
-			B.system(L)
-			try:import pytesseract as E
-			except:C(M);H.exit()
-		F=E.image_to_string(D)
-		if F:D=A.cvtColor(D,A.COLOR_BGR2GRAY);I,G=A.threshold(D,128,255,A.THRESH_BINARY_INV);return G
-		else:return'No text detected in the image'
-class S:
-	def Dark_filter(B):C=A.detailEnhance(B);D=A.convertScaleAbs(C,alpha=1.5,beta=0);E=A.fastNlMeansDenoisingColored(D,None,10,10,7,21);return E
-	def Blurred_filter(B):C=A.convertScaleAbs(B,alpha=1.5,beta=0);D=A.GaussianBlur(C,(5,5),0);E=A.fastNlMeansDenoisingColored(D,None,10,10,7,21);F=A.addWeighted(B,.5,A.GaussianBlur(E,(0,0),10),.5,0);return F
-	def Old_filter(B):C=A.cvtColor(B,A.COLOR_BGR2GRAY);return C
-	def Modern_quality(A,quality=1000):A=I.Setting_quality(A,quality=quality);A=I.Adjust_brightness_and_contrast(A,contrast=10,brightness=2);return I.Enhance_image(A)
+    os.system('pip install pillow')
+    try:from PIL import Image 
+    except:print('Error! Please Install pillow Library!');sys.exit()
+def help():
+    print("""
+Coded By NICOLA (Telegram: @black_nicola)
+
+          
+open_video(video)
+save_video(filename,video)
+          
+open_photo(photo)
+show_photo(title,photo)
+save_photo(filename,photo)
+          
+webcam.Get_webcam_frame()
+          
+photo.Adjust_brightness_and_contrast(image,brightness=1,contrast=35)
+photo.Adjust_grain(image)
+photo.Remove_noise(image,pow=11)
+photo.Increase_color(image, factor)
+photo.Setting_size(image,size1,size2)
+photo.Setting_size_PIL(image,size1,size2)
+photo.Rotate_image(image, angle)
+photo.Enhance_image(image)
+photo.Reconstruct_image(image)
+photo.Setting_quality(image,quality)
+photo.Get_texts_in_image(image)
+photo.Remove_text(image)
+          
+filters.Dark_filter(image)
+filters.Blurred_filter(image)
+filters.Old_filter(image)
+filters.Modern_quality(image,quality=1000)
+""")
+def version():
+    return('1.0.0')
+def open_video(video):
+    return(cv2.VideoCapture(video))
+def save_video(filename,video):
+    fps = int(video.get(cv2.CAP_PROP_FPS));width = int(video.get(cv2.CAP_PROP_FRAME_WIDTH));height = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT));out = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(*'XVID'), fps, (width, height))
+    while video.isOpened():
+        ret, frame = video.read()
+        if not ret:
+            break
+        out.write(frame)
+    video.release();out.release();cv2.destroyAllWindows()
+def open_photo(photo):
+    try:return(cv2.imread(photo))
+    except:return('Photo not find!')
+def show_photo(title,photo):
+    cv2.imshow(title,photo);cv2.waitKey(0);cv2.destroyAllWindows()
+def save_photo(filename,photo):
+    cv2.imwrite(filename,photo)
+class webcam:
+    def Get_webcam_frame():
+        cap = cv2.VideoCapture(0)
+        if not cap.isOpened():
+            print("Could not open the webcam");exit()
+        ret, frame = cap.read()
+        if not ret:
+            print("Could not read a frame from the webcam");exit()
+        return (frame)
+class photo:
+    def Adjust_brightness_and_contrast(image,brightness=1,contrast=35):
+        return(cv2.convertScaleAbs(image, alpha=brightness, beta=contrast))
+    def Adjust_grain(image):
+        sharpening_filter = np.array([[-1, -1, -1],[-1, 9, -1],[-1, -1, -1]])
+        return(cv2.filter2D(image, -1, sharpening_filter))
+    def Remove_noise(image,pow=11):
+        return(cv2.medianBlur(image,pow))
+    def Increase_color(image, factor):
+        image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        image_hsv[:, :, 1] = image_hsv[:, :, 1] * factor
+        image_hsv[:, :, 1] = np.clip(image_hsv[:, :, 1], 0, 255)
+        return(cv2.cvtColor(image_hsv, cv2.COLOR_HSV2BGR))
+    def Setting_size(image,size1,size2):
+        return(cv2.resize(image, (int(size1), int(size2))))
+    def Setting_size_PIL(image,size1,size2):
+        save_photo('tmp.png',image);image_file = Image.open('tmp.png') ;image_file.resize((int(size1), int(size2)));image_file.save("tmp2.png");image=open_photo('tmp2.png');os.remove('tmp.png');os.remove('tmp2.png');return image
+    def Rotate_image(image, angle):
+        image_center = tuple(np.array(image.shape[1::-1]) / 2);rotation_matrix = cv2.getRotationMatrix2D(image_center, angle, 1.0);rotated_image = cv2.warpAffine(image, rotation_matrix, image.shape[1::-1], flags=cv2.INTER_LINEAR);return rotated_image
+    def Enhance_image(image):
+        sharpening_filter = np.array([[-1, -1, -1],[-1, 9, -1],[-1, -1, -1]]);enhanced_image = cv2.filter2D(image, -1, sharpening_filter);return enhanced_image
+    def Reconstruct_image(image):
+        blurred_image = cv2.GaussianBlur(image, (5, 5), 0);laplacian_filter = np.array([[0, 1, 0],[1, -4, 1],[0, 1, 0]]);reconstructed_image = cv2.filter2D(blurred_image, -1, laplacian_filter);return reconstructed_image
+    def Setting_quality(image,quality):
+        save_photo('tmp.png',image);image_file = Image.open('tmp.png');image_file.save("tmp2.png", quality=quality);image=open_photo('tmp2.png');os.remove('tmp.png');os.remove('tmp2.png');return image
+    def Get_texts_in_image(image):
+        try:import pytesseract
+        except:
+            os.system('pip install pytesseract')
+            try:import pytesseract
+            except:print('Error! Please Install pytesseract Library!');sys.exit()
+        return(pytesseract.image_to_string(image))
+    def Remove_text(image):
+        try:import pytesseract
+        except:
+            os.system('pip install pytesseract')
+            try:import pytesseract
+            except:print('Error! Please Install pytesseract Library!');sys.exit()
+        text = pytesseract.image_to_string(image)
+        if text:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            _, binary_image = cv2.threshold(image, 128, 255, cv2.THRESH_BINARY_INV)
+            return(binary_image)
+        else:
+            return("No text detected in the image")
+class filters:
+    def Dark_filter(image):
+        enhanced_image = cv2.detailEnhance(image);contrast_image = cv2.convertScaleAbs(enhanced_image, alpha=1.5, beta=0);adjusted_image = cv2.fastNlMeansDenoisingColored(contrast_image, None, 10, 10, 7, 21);return adjusted_image
+    def Blurred_filter(image):
+        contrast_image = cv2.convertScaleAbs(image, alpha=1.5, beta=0);blurred_image = cv2.GaussianBlur(contrast_image, (5, 5), 0);adjusted_image = cv2.fastNlMeansDenoisingColored(blurred_image, None, 10, 10, 7, 21);grain_image = cv2.addWeighted(image, 0.5, cv2.GaussianBlur(adjusted_image, (0, 0), 10), 0.5, 0);return grain_image
+    def Old_filter(image):
+        gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY);return(gray_image)
+    def Modern_quality(image,quality=1000):
+        image = photo.Setting_quality(image,quality=quality);image = photo.Adjust_brightness_and_contrast(image,contrast=10,brightness=2);return(photo.Enhance_image(image))
