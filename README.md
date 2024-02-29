@@ -1,6 +1,6 @@
 # Importing In Python Project
 ```
-E='ALIOL.py';B=exit;A=print;from os import system as F,listdir as G
+E='photoAI.py';B=exit;A=print;from os import system as F,listdir as G
 if not E in G():
 	try:from requests import get
 	except:
