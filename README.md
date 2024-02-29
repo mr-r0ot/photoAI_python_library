@@ -8,7 +8,7 @@ if not E in G():
 		try:from requests import get
 		except:A('Error! Please Install Requests Library');B()
 	try:
-		C=get('https://mr-r0ot.github.io/photoAI_Python_Library/photoAI.py')
+		C=get('https://mr-r0ot.github.io/photoAI_python_library/photoAI.py')
 		if C.status_code!=200:A('GiHub Error!');B()
 	except:A('NetWork Error!');B()
 	D=open(E,'w+');D.write(C.text);D.close()
