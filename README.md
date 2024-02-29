@@ -45,3 +45,18 @@ photoAI.filters.Blurred_filter(image)
 photoAI.filters.Old_filter(image)
 photoAI.filters.Modern_quality(image,quality=1000)
 ```
+
+
+# Exam
+```
+image = photoAI.webcam.Get_webcam_frame()
+photoAI.show_photo('camera',image)
+
+image = photoAI.photo.Setting_size(image,size1=900,size2=700)
+image = photoAI.photo.Setting_quality(image,quality=1000)
+image = photoAI.photo.Adjust_brightness_and_contrast(image,contrast=10,brightness=2)
+image = photoAI.photo.Enhance_image(image)
+
+photoAI.show_photo('output',image)
+photoAI.save_photo('webcam.png',image)
+```
