@@ -60,3 +60,7 @@ image = photoAI.photo.Enhance_image(image)
 photoAI.show_photo('output',image)
 photoAI.save_photo('webcam.png',image)
 ```
+
+
+Coded By NICOLA (Telegram: @black_nicola)
+https://mr-r0ot.github.io/photoAI_python_library/
